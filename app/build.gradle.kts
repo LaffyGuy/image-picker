@@ -36,11 +36,6 @@ android {
 
         buildConfigField("String", "PIXABAY_API_KEY", "\"$apiKey\"")
 
-//        buildConfigField(
-//            "String",
-//            "PIXABAY_API_KEY",
-//            "\"${properties["PIXABAY_API_KEY"]}\""
-//        )
 
     }
 

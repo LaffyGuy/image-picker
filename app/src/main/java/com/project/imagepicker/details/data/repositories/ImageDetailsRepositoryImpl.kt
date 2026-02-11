@@ -9,6 +9,7 @@ import javax.inject.Inject
 class ImageDetailsRepositoryImpl @Inject constructor(private val imageApi: ImageApi): ImageDetailsRepository {
 
     override suspend fun getImageDetails(id: Long): Image {
-        return imageApi.getImageDetails(id.toString()).toImage()
+        val response = imageApi.getImageDetails(id.toString())
+        return response.hits.first().toImage()
     }
 }

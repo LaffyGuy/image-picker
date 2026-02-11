@@ -19,7 +19,7 @@ interface ImageApi {
     @GET("api/")
     suspend fun getImageDetails(
         @Query("id") id: String
-    ): NetworkImage
+    ): NetworkResponse
 
 
 }

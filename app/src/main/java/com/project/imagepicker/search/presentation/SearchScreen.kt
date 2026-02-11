@@ -53,11 +53,6 @@ fun SearchContent(
     onClearQuery: () -> Unit,
     onClickToDetails: (Long) -> Unit,
 ) {
-
-//    LaunchedEffect(Unit) {
-//        Timber.d( "AAAA data - $images")
-//    }
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -114,18 +109,7 @@ fun SearchContent(
                 )
             }
         }
-//        if (images.isEmpty()) {
-//            EmptyContent()
-//        }
-//        else {
-
     }
-//        if (errorMessage != null) {
-//            ErrorContent(
-//                errorMessage = errorMessage
-//            )
-//        }
-//    }
 
 }
 

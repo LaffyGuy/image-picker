@@ -10,7 +10,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -31,32 +30,6 @@ class SearchViewModel @Inject constructor(private val getSearchImagesUseCase: Ge
         }
     }
 
-
-//    fun searchImage(searchQuery: String) {
-//        Timber.d("AAAA Searching for: $searchQuery")
-//        viewModelScope.launch {
-//            getSearchImagesUseCase(searchQuery).collect { loadResult ->
-//                Timber.d("AAAA LoadResult: $loadResult")
-//                when(loadResult) {
-//                    LoadResult.Loading -> {
-//                        _searchUiState.update { it.copy(isLoading = true) }
-//                    }
-//
-//                    is LoadResult.Success -> {
-//                        _searchUiState.update { it.copy(isLoading = false, images = loadResult.data) }
-//                    }
-//
-//                    is LoadResult.Error -> {
-//                        _searchUiState.update {
-//                            it.copy(isLoading = false,
-//                                errorMessage = loadResult.exception.message ?: "Unknown message")
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
-
     fun onQueryChanged(newQuery: String) {
         _searchUiState.update { it.copy(searchQuery = newQuery) }
     }
@@ -70,8 +43,4 @@ class SearchViewModel @Inject constructor(private val getSearchImagesUseCase: Ge
 data class SearchUiState(
     val searchQuery: String = "",
     val loadResult: LoadResult<List<Image>> = LoadResult.Success(emptyList())
-//    val isLoading: Boolean = false,
-//    val errorMessage: String = "",
-//    val searchQuery: String = "",
-//    val images: List<Image> = emptyList()
 )

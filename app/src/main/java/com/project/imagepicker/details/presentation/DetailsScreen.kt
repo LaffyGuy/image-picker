@@ -6,7 +6,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.project.imagepicker.ui.theme.ImagePickerTheme
 
 @Composable
-fun DetailsScreen() {
+fun DetailsScreen(
+    viewmodel: DetailsViewmodel
+) {
 
 }
 

@@ -1,5 +1,6 @@
 package com.project.imagepicker.search.presentation
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,7 +28,9 @@ import com.project.imagepicker.search.presentation.components.SearchView
 import com.project.imagepicker.ui.theme.ImagePickerTheme
 
 @Composable
-fun SearchScreen() {
+fun SearchScreen(
+    clickToImageDetails: (Long) -> Unit
+) {
     val viewModel: SearchViewModel = hiltViewModel()
     val searchUiState by viewModel.searchUiState.collectAsStateWithLifecycle()
 
@@ -36,7 +39,8 @@ fun SearchScreen() {
         searchQuery = searchUiState.searchQuery,
         searchQueryChanged = viewModel::onQueryChanged,
         onSearch = viewModel::searchImage,
-        onClearQuery = viewModel::clearSearchQuery
+        onClearQuery = viewModel::clearSearchQuery,
+        onClickToDetails = clickToImageDetails
     )
 }
 
@@ -46,7 +50,8 @@ fun SearchContent(
     searchQuery: String,
     searchQueryChanged: (String) -> Unit,
     onSearch: (String) -> Unit,
-    onClearQuery: () -> Unit
+    onClearQuery: () -> Unit,
+    onClickToDetails: (Long) -> Unit,
 ) {
 
 //    LaunchedEffect(Unit) {
@@ -54,7 +59,9 @@ fun SearchContent(
 //    }
 
     Column(
-        modifier = Modifier.fillMaxSize().padding(8.dp),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(8.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -64,7 +71,7 @@ fun SearchContent(
             onSearch = onSearch,
             onClearQuery = onClearQuery
         )
-        when(loadResult) {
+        when (loadResult) {
             LoadResult.Loading -> {
                 Box(
                     modifier = Modifier.fillMaxSize(),
@@ -73,6 +80,7 @@ fun SearchContent(
                     CircularProgressIndicator(modifier = Modifier.size(24.dp))
                 }
             }
+
             is LoadResult.Success -> {
                 if (loadResult.data.isEmpty()) {
                     EmptyContent()
@@ -89,13 +97,17 @@ fun SearchContent(
                             ImageItem(
                                 user = image.user,
                                 likes = image.likes,
-                                imageUrl = image.imageURL
+                                imageUrl = image.imageURL,
+                                modifier = Modifier.clickable {
+                                    onClickToDetails(image.id)
+                                }
                             )
                         }
                     }
                 }
 
             }
+
             is LoadResult.Error -> {
                 ErrorContent(
                     errorMessage = loadResult.exception.message ?: "Unknown error"
@@ -107,7 +119,7 @@ fun SearchContent(
 //        }
 //        else {
 
-        }
+    }
 //        if (errorMessage != null) {
 //            ErrorContent(
 //                errorMessage = errorMessage
@@ -126,7 +138,8 @@ private fun SearchContentPreview() {
             searchQuery = "",
             searchQueryChanged = {},
             onSearch = {},
-            onClearQuery = {}
+            onClearQuery = {},
+            onClickToDetails = {}
         )
     }
 }

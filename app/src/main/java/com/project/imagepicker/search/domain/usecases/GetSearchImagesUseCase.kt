@@ -2,7 +2,7 @@ package com.project.imagepicker.search.domain.usecases
 
 import com.project.imagepicker.core.common.LoadResult
 import com.project.imagepicker.search.domain.SearchImagesRepository
-import com.project.imagepicker.search.domain.model.Image
+import com.project.imagepicker.core.common.Image
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

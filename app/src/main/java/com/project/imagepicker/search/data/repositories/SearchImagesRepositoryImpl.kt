@@ -3,11 +3,10 @@ package com.project.imagepicker.search.data.repositories
 import com.project.imagepicker.core.common.LoadResult
 import com.project.imagepicker.core.common.asResult
 import com.project.imagepicker.core.network.api.ImageApi
-import com.project.imagepicker.search.data.mappers.toImage
+import com.project.imagepicker.core.common.toImage
 import com.project.imagepicker.search.domain.SearchImagesRepository
-import com.project.imagepicker.search.domain.model.Image
+import com.project.imagepicker.core.common.Image
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
@@ -20,5 +19,6 @@ class SearchImagesRepositoryImpl @Inject constructor(private val pixabayApi: Ima
     }
         .flowOn(Dispatchers.IO)
         .asResult()
+
 
 }

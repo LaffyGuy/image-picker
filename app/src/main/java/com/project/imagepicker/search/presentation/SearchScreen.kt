@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.project.imagepicker.core.common.LoadResult
-import com.project.imagepicker.search.domain.model.Image
+import com.project.imagepicker.core.common.Image
 import com.project.imagepicker.search.presentation.components.EmptyContent
 import com.project.imagepicker.search.presentation.components.ErrorContent
 import com.project.imagepicker.search.presentation.components.ImageItem

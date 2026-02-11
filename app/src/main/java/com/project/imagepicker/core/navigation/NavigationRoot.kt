@@ -1,5 +1,6 @@
 package com.project.imagepicker.core.navigation
 
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -17,10 +18,10 @@ import com.project.imagepicker.search.presentation.SearchScreen
 @Composable
 fun NavigationRoot(modifier: Modifier = Modifier) {
 
-    val backStack = rememberNavBackStack()
+    val backStack = rememberNavBackStack(SearchRoute)
 
     Scaffold(
-
+          modifier = Modifier.fillMaxSize()
     ) { paddingValues ->
         NavDisplay(
             backStack = backStack,
@@ -34,7 +35,7 @@ fun NavigationRoot(modifier: Modifier = Modifier) {
                 entry<SearchRoute> {
                     SearchScreen(
                         clickToImageDetails = { id ->
-                            backStack.add(DetailsRoute(id.toInt()))
+                            backStack.add(DetailsRoute(id))
                         }
                     )
                 }

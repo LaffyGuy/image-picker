@@ -3,7 +3,7 @@ package com.project.imagepicker.search.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.project.imagepicker.core.common.LoadResult
-import com.project.imagepicker.search.domain.model.Image
+import com.project.imagepicker.core.common.Image
 import com.project.imagepicker.search.domain.usecases.GetSearchImagesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

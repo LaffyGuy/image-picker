@@ -1,4 +1,4 @@
-package com.project.imagepicker.search.domain.model
+package com.project.imagepicker.core.common
 
 data class Image(
     val id: Long,

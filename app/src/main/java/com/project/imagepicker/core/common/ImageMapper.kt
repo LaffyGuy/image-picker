@@ -1,7 +1,6 @@
-package com.project.imagepicker.search.data.mappers
+package com.project.imagepicker.core.common
 
 import com.project.imagepicker.core.network.dto.NetworkImage
-import com.project.imagepicker.search.domain.model.Image
 
 fun NetworkImage.toImage(): Image {
     return Image(

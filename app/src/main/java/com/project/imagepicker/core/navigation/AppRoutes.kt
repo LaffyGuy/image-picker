@@ -8,5 +8,5 @@ data object SearchRoute: NavKey
 
 @Serializable
 data class DetailsRoute(
-    val id: Int
+    val id: Long
 ): NavKey

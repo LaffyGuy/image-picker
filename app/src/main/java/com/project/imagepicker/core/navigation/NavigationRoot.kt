@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
@@ -14,11 +15,12 @@ import androidx.navigation3.ui.NavDisplay
 import com.project.imagepicker.details.presentation.DetailsScreen
 import com.project.imagepicker.details.presentation.DetailsViewmodel
 import com.project.imagepicker.search.presentation.SearchScreen
+import com.project.imagepicker.search.presentation.SearchViewModel
 
 @Composable
 fun NavigationRoot(modifier: Modifier = Modifier) {
 
-    val backStack = rememberNavBackStack(SearchRoute)
+    val backStack = rememberNavBackStack(SearchRoute())
 
     Scaffold(
           modifier = Modifier.fillMaxSize()
@@ -32,8 +34,9 @@ fun NavigationRoot(modifier: Modifier = Modifier) {
             ),
             onBack = { backStack.removeLastOrNull() },
             entryProvider = entryProvider {
-                entry<SearchRoute> {
+                entry<SearchRoute> { key ->
                     SearchScreen(
+                        tagQuery = key.query,
                         clickToImageDetails = { id ->
                             backStack.add(DetailsRoute(id))
                         }
@@ -46,6 +49,9 @@ fun NavigationRoot(modifier: Modifier = Modifier) {
                         }
                     )
                     DetailsScreen(
+                        onClickToTag = { tag ->
+                            backStack.add(SearchRoute(tag))
+                        },
                         viewmodel = viewModel
                     )
                 }

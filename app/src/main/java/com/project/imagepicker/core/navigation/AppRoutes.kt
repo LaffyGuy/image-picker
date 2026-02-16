@@ -4,7 +4,9 @@ import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object SearchRoute: NavKey
+data class SearchRoute(
+    val query: String? = null
+): NavKey
 
 @Serializable
 data class DetailsRoute(

@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">Image Picker</string>
     <string name="search">Search</string>
+    <string name="network_error_message">No internet connection</string>
+    <string name="server_error_message">Server error %1$d</string>
+    <string name="unknown_error_message">Unknown Error</string>
+    <string name="rate_limit_error_message">API rate limit exceeded</string>
 </resources>

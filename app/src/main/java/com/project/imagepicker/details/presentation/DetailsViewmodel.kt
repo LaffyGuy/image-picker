@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.project.imagepicker.core.common.Image
 import com.project.imagepicker.core.navigation.DetailsRoute
 import com.project.imagepicker.details.domain.usecases.GetImageDetailsByIdUseCase
+import com.project.imagepicker.search.domain.SearchImagesRepository
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -38,6 +39,7 @@ class DetailsViewmodel @AssistedInject constructor(
             ) }
         }
     }
+
 
 
     @AssistedFactory

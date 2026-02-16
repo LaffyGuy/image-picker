@@ -8,6 +8,4 @@ interface SearchImagesRepository {
 
     fun getSearchImages(searchQuery: String): Flow<LoadResult<List<Image>>>
 
-
-
 }

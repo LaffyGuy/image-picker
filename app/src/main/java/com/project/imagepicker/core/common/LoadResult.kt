@@ -1,5 +1,6 @@
 package com.project.imagepicker.core.common
 
+import com.project.imagepicker.core.exceptions.toAppException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
@@ -18,4 +19,6 @@ sealed class LoadResult<out T> {
 fun <T> Flow<T>.asResult(): Flow<LoadResult<T>> =
     map<T, LoadResult<T>> { LoadResult.Success(it) }
     .onStart { emit(LoadResult.Loading) }
-    .catch { emit(LoadResult.Error(it as Exception)) }
+    .catch { e ->
+        emit(LoadResult.Error(e.toAppException()))
+    }

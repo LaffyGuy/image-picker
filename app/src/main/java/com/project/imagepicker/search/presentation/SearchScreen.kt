@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,8 +20,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.project.imagepicker.core.common.ExceptionToMessageMapper
 import com.project.imagepicker.core.common.LoadResult
 import com.project.imagepicker.core.common.Image
+import com.project.imagepicker.core.common.LoadResultView
 import com.project.imagepicker.search.presentation.components.EmptyContent
 import com.project.imagepicker.search.presentation.components.ErrorContent
 import com.project.imagepicker.search.presentation.components.ImageItem
@@ -29,88 +32,78 @@ import com.project.imagepicker.ui.theme.ImagePickerTheme
 
 @Composable
 fun SearchScreen(
-    clickToImageDetails: (Long) -> Unit
+    tagQuery: String?,
+    clickToImageDetails: (Long) -> Unit,
 ) {
     val viewModel: SearchViewModel = hiltViewModel()
     val searchUiState by viewModel.searchUiState.collectAsStateWithLifecycle()
 
-    SearchContent(
+
+    LaunchedEffect(tagQuery) {
+        tagQuery?.let { viewModel.handleInitialQuery(it) }
+    }
+
+    LoadResultView(
         loadResult = searchUiState.loadResult,
-        searchQuery = searchUiState.searchQuery,
-        searchQueryChanged = viewModel::onQueryChanged,
-        onSearch = viewModel::searchImage,
-        onClearQuery = viewModel::clearSearchQuery,
-        onClickToDetails = clickToImageDetails
+        tryAgainAction = {},
+        content = { imagesList ->
+            SearchContent(
+                searchUiState = searchUiState,
+                imagesList = imagesList,
+                onQueryChange = viewModel::onQueryChanged,
+                onSearch = viewModel::searchImage,
+                onClearQuery = viewModel::clearSearchQuery,
+                onClickToDetails = clickToImageDetails
+            )
+        }
     )
 }
 
 @Composable
 fun SearchContent(
-    loadResult: LoadResult<List<Image>>,
-    searchQuery: String,
-    searchQueryChanged: (String) -> Unit,
+    searchUiState: SearchUiState,
+    imagesList: List<Image>,
+    onQueryChange: (String) -> Unit,
     onSearch: (String) -> Unit,
     onClearQuery: () -> Unit,
-    onClickToDetails: (Long) -> Unit,
+    onClickToDetails: (Long) -> Unit
 ) {
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(8.dp),
+        modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         SearchView(
-            query = searchQuery,
-            onQueryChange = searchQueryChanged,
+            query = searchUiState.searchQuery,
+            onQueryChange = onQueryChange,
             onSearch = onSearch,
             onClearQuery = onClearQuery
         )
-        when (loadResult) {
-            LoadResult.Loading -> {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator(modifier = Modifier.size(24.dp))
-                }
-            }
 
-            is LoadResult.Success -> {
-                if (loadResult.data.isEmpty()) {
-                    EmptyContent()
-                } else {
-                    LazyVerticalGrid(
-                        columns = GridCells.Fixed(2),
-                        modifier = Modifier
-                            .weight(1f)
-                            .padding(horizontal = 4.dp),
-                        verticalArrangement = Arrangement.spacedBy(12.dp),
-                        horizontalArrangement = Arrangement.spacedBy(12.dp)
-                    ) {
-                        items(loadResult.data) { image ->
-                            ImageItem(
-                                user = image.user,
-                                likes = image.likes,
-                                imageUrl = image.imageURL,
-                                modifier = Modifier.clickable {
-                                    onClickToDetails(image.id)
-                                }
-                            )
+        if (imagesList.isEmpty()) {
+            EmptyContent()
+        } else {
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(2),
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(horizontal = 4.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                items(imagesList) { image ->
+                    ImageItem(
+                        user = image.user,
+                        likes = image.likes,
+                        imageUrl = image.imageURL,
+                        modifier = Modifier.clickable {
+                            onClickToDetails(image.id)
                         }
-                    }
+                    )
                 }
-
-            }
-
-            is LoadResult.Error -> {
-                ErrorContent(
-                    errorMessage = loadResult.exception.message ?: "Unknown error"
-                )
             }
         }
     }
-
 }
 
 @Preview(showSystemUi = true)
@@ -118,9 +111,9 @@ fun SearchContent(
 private fun SearchContentPreview() {
     ImagePickerTheme {
         SearchContent(
-            loadResult = LoadResult.Loading,
-            searchQuery = "",
-            searchQueryChanged = {},
+            searchUiState = SearchUiState(),
+            imagesList = emptyList(),
+            onQueryChange = {},
             onSearch = {},
             onClearQuery = {},
             onClickToDetails = {}

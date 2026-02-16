@@ -10,12 +10,16 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.ResponseBody.Companion.toResponseBody
+import retrofit2.HttpException
+import retrofit2.Response
 import javax.inject.Inject
 
-class SearchImagesRepositoryImpl @Inject constructor(private val pixabayApi: ImageApi): SearchImagesRepository {
+class SearchImagesRepositoryImpl @Inject constructor(private val imageApi: ImageApi): SearchImagesRepository {
 
     override fun getSearchImages(searchQuery: String): Flow<LoadResult<List<Image>>> = flow {
-        emit(pixabayApi.searchImages(searchQuery).hits.map { it.toImage() })
+        emit(imageApi.searchImages(searchQuery).hits.map { it.toImage() })
     }
         .flowOn(Dispatchers.IO)
         .asResult()
